@@ -1,24 +1,22 @@
-import logo from './logo.svg';
-import './App.css';
+import './styles/App.css';
 
-function App() {
+/* 
+  - TDD!
+  - Display the logo - make it responsive using media queries
+  - Display a search bar (again responsive)
+  - Make search bar a controlled component
+  - When search is hit, it sets the search term and the useEffect responds
+    useEffect(() => {}, [searchTerm]) etc
+  - The use effect will set the results that will cause a re-render
+  - Set loading spinner when the results are being retrieved
+  - Render the images in the results (use flexbox)
+  - Style search bar
+*/
+   
+
+const App = () => {
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    null
   );
 }
 
