@@ -3,7 +3,9 @@
     "jsx": "react-jsx",
     "moduleResolution": "node",
     "module": "esnext",
+    "strict": true,
     "allowSyntheticDefaultImports": true,
+    "forceConsistentCasingInFileNames": true,
   },
   "include": ["src", "custom.d.ts"]
 }

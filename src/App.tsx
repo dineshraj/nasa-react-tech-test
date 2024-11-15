@@ -1,3 +1,5 @@
+import Logo from './components/Logo';
+
 import './styles/App.css';
 
 /* 
@@ -12,11 +14,12 @@ import './styles/App.css';
   - Render the images in the results (use flexbox)
   - Style search bar
 */
-   
+
+const LOGO_URL = 'https://images.squarespace-cdn.com/content/v1/5046b167e4b0b2bcc3a91ee3/1518305402717-OE1WM7MOSG4QG1YTWIUO/NASA_Worm_logo.svg.png';
 
 const App = () => {
   return (
-    null
+    <Logo url={LOGO_URL} alt="NASA Logo"/>
   );
 }
 
