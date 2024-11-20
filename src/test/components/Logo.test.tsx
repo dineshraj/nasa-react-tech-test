@@ -5,7 +5,7 @@ describe('Logo', () => {
   it('renders the logo', async () => {
     render(<Logo url='' alt='' />);
 
-    const logo = await screen.findByTestId('logo');
-    expect(logo).toBeTruthy();
+    const logoElement = await screen.findByTestId('logo');
+    expect(logoElement).toBeTruthy();
   })
 })

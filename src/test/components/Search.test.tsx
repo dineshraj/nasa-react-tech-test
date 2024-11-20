@@ -1,11 +1,14 @@
-import { render, screen } from "@testing-library/react";
+import { render, screen, within } from "@testing-library/react";
 import Search from "../../components/Search";
 
 describe('Search', () => {
-  it('renders the search input', async () => {
-    render(<Search />);
+  it('renders the search input with correct search term', async () => {
+    render(<Search currentSearch="current search" handleOnChange={() => {}} handleSubmit={() => {}}/>);
 
-    const logo = await screen.findByTestId('search');
-    expect(logo).toBeTruthy();
+    const searchForm = await screen.findByTestId('search-form');
+    const searchInput = screen.getByRole('textbox', { name: 'search' } );
+
+    expect(searchForm).toBeTruthy();
+    expect(searchInput).toHaveValue('current search');
   });
 });
