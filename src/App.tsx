@@ -1,8 +1,9 @@
 import { FormEvent, FormEventHandler, useEffect, useState } from 'react';
 import Logo from './components/Logo';
 import Search from './components/Search';
+import ImageResults from './components/ImageResults';
 
-import './styles/App.css';
+import { SearchResults } from './types';
 
 /* 
   - TDD!
@@ -19,9 +20,12 @@ import './styles/App.css';
 
 const LOGO_URL = 'https://images.squarespace-cdn.com/content/v1/5046b167e4b0b2bcc3a91ee3/1518305402717-OE1WM7MOSG4QG1YTWIUO/NASA_Worm_logo.svg.png';
 
+
+
 const App = () => {
+  console.log('RENDER')
   const [currentSearch, setCurrentSearch] = useState('');
-  const [searchResults, setSearchResults] = useState([]);
+  const [searchResults, setSearchResults] = useState<SearchResults | null>(null);
 
   const updateSearchTerm = ({ target }: { target: HTMLInputElement; }) => {
     setCurrentSearch(target.value.toLowerCase());
@@ -45,11 +49,15 @@ const App = () => {
       console.log(e.message);
     }
   }
+  console.log('searchResults22', searchResults)
 
   return (
     <>
       <Logo url={LOGO_URL} alt="NASA Logo"/>
       <Search handleOnChange={updateSearchTerm} handleSubmit={fetchSearchTerm} currentSearch={currentSearch} />
+
+      {//@ts-ignore
+      searchResults && <ImageResults searchResults={searchResults}/>}
     </>
   );
 }
