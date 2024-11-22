@@ -1,8 +1,7 @@
 .search-form {
-  max-width: 350px;
+  max-width: 340px;
   margin: 0 auto;
   display: block;
-  margin-top: 40px;
   position: relative;
 }
 
@@ -15,6 +14,7 @@
   border: none;
   background-color: #e7e7e7;
   outline: none;
+  font-size: 20px;
 }
 
 .search-form__icon {
