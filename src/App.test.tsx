@@ -8,7 +8,7 @@ const fetchMock = (value: any) => {
   } as unknown as Response)
 }
 
-const mockImageItems = {
+const mockResponse = {
   collection: {
     version: '',
     href: "",
@@ -138,8 +138,8 @@ describe('App', () => {
   })
 
 
-  it.only('renders the correct images when the user searches', async () => {
-    fetchMock(mockImageItems);
+  it('renders the correct images when the user searches', async () => {
+    fetchMock(mockResponse);
 
     render(<App />);
 

@@ -8,7 +8,7 @@ interface ImageResultsProps {
 
 const ImageResults = ({ searchResults: { collection } }: ImageResultsProps) => {
   return (
-    <div data-testid="image-results">
+    <div className="image-results" data-testid="image-results">
       {
         collection.items.map((item: Item, i: number) => <img src={item.links[0].href} key={i} />)
       }

@@ -1,8 +1,12 @@
 .image-results {
   display: flex;
   flex-wrap: wrap;
+  justify-content: center;
 }
 
 img {
-  max-height: 150px;
+  max-height: 200px;
+  border-radius: 20px;
+  margin: 10px;
+  display: block;
 }
