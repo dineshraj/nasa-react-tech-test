@@ -55,9 +55,7 @@ const App = () => {
     <>
       <Logo url={LOGO_URL} alt="NASA Logo"/>
       <Search handleOnChange={updateSearchTerm} handleSubmit={fetchSearchTerm} currentSearch={currentSearch} />
-
-      {//@ts-ignore
-      searchResults && <ImageResults searchResults={searchResults}/>}
+      {searchResults && <ImageResults searchResults={searchResults}/>}
     </>
   );
 }

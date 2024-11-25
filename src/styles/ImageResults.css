@@ -1,0 +1,8 @@
+.image-results {
+  display: flex;
+  flex-wrap: wrap;
+}
+
+img {
+  max-height: 150px;
+}

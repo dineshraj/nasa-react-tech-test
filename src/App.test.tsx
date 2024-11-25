@@ -148,7 +148,6 @@ describe('App', () => {
     fireEvent.submit(searchElement)
     const imagesContainer = await screen.findByTestId('image-results');
     const imageResults = within(imagesContainer).getAllByRole('img')
-    screen.debug()
 
     expect(imageResults).toHaveLength(2);
     expect(imageResults[0]).toHaveAttribute('src', 'https://images-assets.nasa.gov/image/PIA12235/PIA12235~thumb.jpg')

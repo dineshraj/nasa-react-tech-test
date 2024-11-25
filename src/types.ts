@@ -1,11 +1,11 @@
-
-
 export interface SearchResults {
-  href: string;
-  items: Item[];
-  links: PageLink[]
-  metadata:  {
-    total_hits: number;
+  collection: {
+    href: string;
+    items: Item[];
+    links: PageLink[]
+    metadata:  {
+      total_hits: number;
+    }
   }
 }
 

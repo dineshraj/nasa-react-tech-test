@@ -1,8 +1,12 @@
 import { SearchResults, Item } from "../types";
 
-//@ts-ignore
-const ImageResults = ({ searchResults: { collection } }: SearchResults) => {
-  console.log("🚀 ~ ImageResults ~ images:", collection)
+import '../styles/ImageResults.css';
+
+interface ImageResultsProps {
+  searchResults: SearchResults
+}
+
+const ImageResults = ({ searchResults: { collection } }: ImageResultsProps) => {
   return (
     <div data-testid="image-results">
       {
