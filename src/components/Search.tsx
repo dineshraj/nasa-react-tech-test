@@ -1,7 +1,7 @@
-import { ChangeEventHandler, FormEventHandler } from "react";
+import { ChangeEventHandler, FormEventHandler } from 'react';
 
 import '../styles/Search.css';
-import SearchIcon from "./SearchIcon";
+import SearchIcon from './SearchIcon';
 
 interface SearchProps {
   currentSearch: string;
@@ -9,10 +9,21 @@ interface SearchProps {
   handleSubmit: FormEventHandler<HTMLFormElement>;
 }
 
-const Search = ({currentSearch, handleOnChange, handleSubmit}: SearchProps) => {
+const Search = ({
+  currentSearch,
+  handleOnChange,
+  handleSubmit,
+}: SearchProps) => {
   return (
-    <form onSubmit={handleSubmit} data-testid="search-form" role="form" className="search-form">
-      <label htmlFor="search" className="search-form__label visuallyhidden">Search</label>
+    <form
+      onSubmit={handleSubmit}
+      data-testid="search-form"
+      role="form"
+      className="search-form"
+    >
+      <label htmlFor="search" className="search-form__label visuallyhidden">
+        Search
+      </label>
       <SearchIcon />
       <input
         type="text"
