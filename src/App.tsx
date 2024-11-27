@@ -47,7 +47,7 @@ const App = () => {
     try {
       const response = await fetch(`https://images-api.nasa.gov/search?q=${currentSearch}&media_type=image`);
 
-      if (response.ok) { 
+      if (!response.ok) { 
         throw new Error('Error'); // use Error Boundary in future
       }
       
