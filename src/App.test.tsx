@@ -1,5 +1,6 @@
 import { fireEvent, within, render, screen, waitFor } from '@testing-library/react';
 import App from './App';
+import { act } from 'react';
 
 const fetchMock = (value: any) => {
   jest.spyOn(global, 'fetch').mockResolvedValue({
@@ -104,7 +105,7 @@ describe('App', () => {
       fireEvent.change(searchElement, { target: { value: 'moon' } })
       fireEvent.submit(searchElement)
 
-      expect(global.fetch).toHaveBeenCalledWith(expectedApiCall)
+      await waitFor(() => expect(global.fetch).toHaveBeenCalledWith(expectedApiCall));
     });
 
     it('does not fetch if no search term is entered', async () => {
@@ -120,7 +121,7 @@ describe('App', () => {
     });
   });
 
-  it('errors gracefully when the fetch fails', async () => {
+  it('displays a console log message when the fetch fails', async () => {
     const consoleLogSpy = jest.spyOn(console, 'log');
     jest.spyOn(global, 'fetch').mockResolvedValue({
       ok: false
@@ -137,6 +138,52 @@ describe('App', () => {
     })
   })
 
+  it('displays a graceful error message whenthe fetch fails', async () => {
+    jest.spyOn(global, 'fetch').mockResolvedValue({
+      ok: false
+    } as unknown as Response);
+
+    render(<App />);
+
+    const searchElement = await screen.findByTestId('search');
+    fireEvent.change(searchElement, { target: { value: 'moon' } })
+    fireEvent.submit(searchElement)
+
+    await waitFor(() => {
+      const errorElement = screen.queryByTestId('error');
+      expect(errorElement).toBeInTheDocument();
+    })
+  })
+
+  it('removes the error message if the fetch fails initially and then works afterwards', async () => {
+    jest.spyOn(global, 'fetch')
+      .mockResolvedValueOnce({
+        ok: false
+      } as unknown as Response)
+      .mockResolvedValueOnce({
+        ok: true,
+        json: jest.fn().mockResolvedValue(mockResponse)
+      } as unknown as Response);
+    
+      render(<App />);
+    
+      let searchElement = await screen.findByTestId('search');
+      fireEvent.change(searchElement, { target: { value: 'moon' } })
+      fireEvent.submit(searchElement)
+    
+    await waitFor(() => {
+      const errorElement = screen.queryByTestId('error');
+      expect(errorElement).toBeInTheDocument();
+    })
+
+    fireEvent.change(searchElement, { target: { value: 'moon' } })
+    fireEvent.submit(searchElement)
+    
+    await waitFor(() => {
+      const errorElement = screen.queryByTestId('error');
+      expect(errorElement).not.toBeInTheDocument();
+      })
+  });
 
   it('renders the correct images when the user searches', async () => {
     fetchMock(mockResponse);
@@ -146,11 +193,48 @@ describe('App', () => {
     const searchElement = await screen.findByTestId('search');
     fireEvent.change(searchElement, { target: { value: 'moon' } })
     fireEvent.submit(searchElement)
+
     const imagesContainer = await screen.findByTestId('image-results');
     const imageResults = within(imagesContainer).getAllByRole('img')
 
     expect(imageResults).toHaveLength(2);
     expect(imageResults[0]).toHaveAttribute('src', 'https://images-assets.nasa.gov/image/PIA12235/PIA12235~thumb.jpg')
     expect(imageResults[1]).toHaveAttribute('src', 'https://images-assets.nasa.gov/image/PIA13517/PIA13517~thumb.jpg')
+  });
+
+  it('sets a loading spinner when search is performed', async () => {
+    fetchMock(mockResponse);
+
+    render(<App />);
+
+    const searchElement = await screen.findByTestId('search');
+    fireEvent.change(searchElement, { target: { value: 'moon' } })
+    fireEvent.submit(searchElement)
+
+    const loader = await screen.findByTestId('loader');
+    expect(loader).toBeTruthy();
+  });
+
+  it.only('clears previous search results whilst a new search is being performed', async () => {
+    fetchMock(mockResponse);
+
+    render(<App />);
+
+    const searchElement = await screen.findByTestId('search');
+    fireEvent.change(searchElement, { target: { value: 'moon' } })
+    fireEvent.submit(searchElement)
+  
+    const imagesContainer = await screen.findByTestId('image-results');
+    const imageResults = within(imagesContainer).getAllByRole('img')
+
+    expect(imageResults).toHaveLength(2);
+
+    fireEvent.change(searchElement, { target: { value: 'mars' } })
+    fireEvent.submit(searchElement)
+    
+    await waitFor(() => {
+      const imagesContainerAfterRerender = screen.queryByTestId('image-results');
+      expect(imagesContainerAfterRerender).not.toBeInTheDocument();
+    });
   });
 })
