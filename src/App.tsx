@@ -42,7 +42,8 @@ const App = () => {
     const params = new URLSearchParams(location.search);
     const currentPage = params.get('page') || '';
 
-    if (currentSearch !== '') {
+    // dont load anything on initial render
+    if (searchResults !== null) {
       fetchMethod(buildSearchURL(currentSearch, currentPage));
     } 
   }, [location.search]);
@@ -74,10 +75,6 @@ const App = () => {
       setError(true);
       console.log(e.message);
     }
-  };
-
-  const fetchNextPage = async (url: string) => {
-    fetchMethod(url);
   };
 
   const fetchSearchTerm = async (event: FormEvent<HTMLFormElement>) => {
