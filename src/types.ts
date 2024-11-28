@@ -33,7 +33,7 @@ interface Link {
   render: string;
 }
 
-interface PageLink {
+export interface PageLink {
   href: string;
   prompt: string;
   rel: string;

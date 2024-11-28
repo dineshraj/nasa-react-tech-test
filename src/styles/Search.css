@@ -1,7 +1,7 @@
 .search-form {
   max-width: 340px;
   margin: 0 auto;
-  margin-bottom: 10px;
+  margin-bottom: 30px;
   display: block;
   position: relative;
 }
@@ -9,7 +9,7 @@
 .search-form__input {
   width: 100%;
   box-sizing: border-box;
-  padding: 15px;
+  padding: 15px 20px;
   padding-right: 32px;
   border-radius: 25px;
   border: none;
@@ -18,9 +18,11 @@
   font-size: 20px;
 }
 
-.search-form__icon {
+.search-form__button {
+  border: none;
+  background: none;
   position: absolute;
-  top: 50%;
+  top: 55%;
   right: 20px;
   transform: translateY(-50%);
 }

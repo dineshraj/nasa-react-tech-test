@@ -24,7 +24,9 @@ const Search = ({
       <label htmlFor="search" className="search-form__label visuallyhidden">
         Search
       </label>
-      <SearchIcon />
+      <button className="search-form__button">
+        <SearchIcon />
+      </button>
       <input
         type="text"
         name="search"

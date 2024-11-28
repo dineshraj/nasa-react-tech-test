@@ -1,18 +1,19 @@
 import {
   CSSProperties,
   FormEvent,
-  FormEventHandler,
   useEffect,
   useState,
 } from 'react';
+import { MoonLoader } from 'react-spinners';
+import { useLocation } from 'react-router-dom';
+
 import Logo from './components/Logo';
 import Search from './components/Search';
 import ImageResults from './components/ImageResults';
-
-import { MoonLoader } from 'react-spinners';
+import Pagination from './components/Pagination';
+import ErrorMessage from './components/ErrorMessage';
 
 import { SearchResults } from './types';
-import ErrorMessage from './components/ErrorMessage';
 
 const LOGO_URL =
   'https://images.squarespace-cdn.com/content/v1/5046b167e4b0b2bcc3a91ee3/1518305402717-OE1WM7MOSG4QG1YTWIUO/NASA_Worm_logo.svg.png';
@@ -23,15 +24,15 @@ const loaderOverride: CSSProperties = {
   marginTop: '30px',
 };
 
-/* 
-  TODO
-
-  - Make the search icon a button that submits the form
-  - Pagination (makes a new request - store page in state based on feed and then use that as a query param)
-  - Clicking an image takes you to the full version
-*/
+const buildSearchURL = (currentSearch: string, currentPage?: string) => {
+  if (currentPage) {
+    return `https://images-api.nasa.gov/search?q=${currentSearch}&media_type=image&page=${currentPage}`;
+  }
+  return `https://images-api.nasa.gov/search?q=${currentSearch}&media_type=image`;
+}
 
 const App = () => {
+  const location = useLocation();
   const [currentSearch, setCurrentSearch] = useState('');
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(false);
@@ -39,29 +40,34 @@ const App = () => {
     null
   );
 
+  useEffect(() => {
+    const params = new URLSearchParams(location.search);
+    const currentPage = params.get('page') || '';
+
+    if (currentSearch && currentPage) {
+      fetchMethod(buildSearchURL(currentSearch, currentPage));
+    } else if (currentSearch !== '') {
+      fetchMethod(buildSearchURL(currentSearch));
+    }
+  }, [location.search]);
+
   const updateSearchTerm = ({ target }: { target: HTMLInputElement }) => {
     setCurrentSearch(target.value.toLowerCase());
   };
 
-  const fetchSearchTerm = async (event: FormEvent<HTMLFormElement>) => {
-    event.preventDefault();
-
-    // set error to false if there was one previously
+  const fetchMethod = async (url: string) => {
+    // set error to false if there was one previously 6
     setError(false);
 
-    if (currentSearch === '') return;
     // clear search results whilst loading new results
     setSearchResults(null);
     // loading results
     setLoading(true);
-
     try {
-      const response = await fetch(
-        `https://images-api.nasa.gov/search?q=${currentSearch}&media_type=image`
-      );
+      const response = await fetch(url);
 
       if (!response.ok) {
-        throw new Error('Error'); // use Error Boundary in future
+        throw new Error('Error');
       }
 
       const json = await response.json();
@@ -72,9 +78,30 @@ const App = () => {
       setError(true);
       console.log(e.message);
     }
+  }
+
+  const fetchNextPage = async (url: string) => {
+    fetchMethod(url);
+  }
+
+  const fetchSearchTerm = async (event: FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+
+    if (currentSearch === '') return;
+    
+    fetchMethod(buildSearchURL(currentSearch));
   };
 
-  // console.log(searchResults);
+  const showPagination = () => {
+    return (
+      searchResults?.collection?.links && (
+        <Pagination
+          links={searchResults.collection.links}
+          handleNavigation={(url: string) => fetchNextPage(url)}
+        />
+      )
+    )
+  }
 
   return (
     <>
@@ -92,6 +119,7 @@ const App = () => {
       />
       {error && <ErrorMessage />}
       {searchResults && <ImageResults searchResults={searchResults} />}
+      {showPagination()}
     </>
   );
 };

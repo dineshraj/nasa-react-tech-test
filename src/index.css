@@ -12,6 +12,11 @@ code {
     monospace;
 }
 
+#root {
+  max-width: 1400px;
+  margin: 0 auto;
+}
+
 .visuallyhidden {
   clip: rect(0 0 0 0);
   clip-path: inset(50%);
