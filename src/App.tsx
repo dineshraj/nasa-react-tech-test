@@ -1,9 +1,4 @@
-import {
-  CSSProperties,
-  FormEvent,
-  useEffect,
-  useState,
-} from 'react';
+import { CSSProperties, FormEvent, useEffect, useState } from 'react';
 import { MoonLoader } from 'react-spinners';
 import { useLocation } from 'react-router-dom';
 
@@ -24,15 +19,18 @@ const loaderOverride: CSSProperties = {
   marginTop: '30px',
 };
 
-const buildSearchURL = (currentSearch: string, currentPage?: string) => {
-  if (currentPage) {
-    return `https://images-api.nasa.gov/search?q=${currentSearch}&media_type=image&page=${currentPage}`;
-  }
-  return `https://images-api.nasa.gov/search?q=${currentSearch}&media_type=image`;
-}
+const buildSearchURL = (currentSearch: string, currentPage: string = '1') => {
+  return `https://images-api.nasa.gov/search?q=${currentSearch}&media_type=image&page=${currentPage}`;
+};
+
+/* 
+  Page number over 10 with slice??
+
+*/
 
 const App = () => {
   const location = useLocation();
+
   const [currentSearch, setCurrentSearch] = useState('');
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(false);
@@ -44,11 +42,9 @@ const App = () => {
     const params = new URLSearchParams(location.search);
     const currentPage = params.get('page') || '';
 
-    if (currentSearch && currentPage) {
+    if (currentSearch !== '') {
       fetchMethod(buildSearchURL(currentSearch, currentPage));
-    } else if (currentSearch !== '') {
-      fetchMethod(buildSearchURL(currentSearch));
-    }
+    } 
   }, [location.search]);
 
   const updateSearchTerm = ({ target }: { target: HTMLInputElement }) => {
@@ -78,17 +74,17 @@ const App = () => {
       setError(true);
       console.log(e.message);
     }
-  }
+  };
 
   const fetchNextPage = async (url: string) => {
     fetchMethod(url);
-  }
+  };
 
   const fetchSearchTerm = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
 
     if (currentSearch === '') return;
-    
+
     fetchMethod(buildSearchURL(currentSearch));
   };
 
@@ -97,11 +93,10 @@ const App = () => {
       searchResults?.collection?.links && (
         <Pagination
           links={searchResults.collection.links}
-          handleNavigation={(url: string) => fetchNextPage(url)}
         />
       )
-    )
-  }
+    );
+  };
 
   return (
     <>

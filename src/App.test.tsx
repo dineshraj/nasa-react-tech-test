@@ -93,16 +93,15 @@ describe('App', () => {
     });
   });
 
-  it('renders the correct initial components', async () => {
+  it('renders the correct initial components', () => {
     fetchMock('');
     renderApp();
 
-    const logoElement = await screen.findByTestId('logo');
-    const searchElement = await screen.findByTestId('search');
-    await waitFor(() => {
-      expect(logoElement).toBeTruthy();
-      expect(searchElement).toBeTruthy();
-    });
+    const logoElement = screen.getByTestId('logo');
+    const searchElement = screen.getByTestId('search');
+
+    expect(logoElement).toBeVisible();
+    expect(searchElement).toBeVisible();
   });
 
   describe('Search', () => {
@@ -115,16 +114,15 @@ describe('App', () => {
 
       renderApp();
 
-      const searchElement = await screen.findByTestId('search');
+      const searchElement = screen.getByTestId('search');
       const expectedApiCall =
-        'https://images-api.nasa.gov/search?q=moon&media_type=image';
+        'https://images-api.nasa.gov/search?q=moon&media_type=image&page=1';
 
       fireEvent.change(searchElement, { target: { value: 'moon' } });
       fireEvent.submit(searchElement);
-
-      await waitFor(() =>
+      await waitFor(() => {
         expect(global.fetch).toHaveBeenCalledWith(expectedApiCall)
-      );
+      })
     });
 
     it('it makes a fetch request correctly to the next page', async () => {

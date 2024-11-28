@@ -67,11 +67,11 @@ const mockResponse = {
   },
 } as unknown as SearchResults;
 
-describe('Logo', () => {
-  it('renders the logo', async () => {
+describe('Image results', () => {
+  it('renders the image results', () => {
     render(<ImageResults searchResults={mockResponse} />);
 
-    const imageResult = await screen.findByTestId('image-results');
-    expect(imageResult).toBeTruthy();
+    const imageResult = screen.getByTestId('image-results');
+    expect(imageResult).toBeVisible();
   });
 });

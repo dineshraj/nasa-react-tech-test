@@ -5,10 +5,9 @@ import '../styles/Pagination.css';
 
 interface PaginationProps {
   links: PageLink[];
-  handleNavigation: Function;
 }
 
-const Pagination = ({ links, handleNavigation }: PaginationProps) => {
+const Pagination = ({ links }: PaginationProps) => {
   return (
     <div className="pagination">
       {links.map((link: PageLink, i: number) => {
@@ -16,8 +15,7 @@ const Pagination = ({ links, handleNavigation }: PaginationProps) => {
           <Link
             key={i}
             data-testid={link.rel}
-            to={`?page=${link.href.slice(-1)}`} 
-            // onClick={() => handleNavigation(link.href)}
+            to={`?page=${link.href.slice(-1)}`}
           >
             {link.prompt}
           </Link>
